@@ -20,7 +20,7 @@ function parseSignature(signature) {
   return {
     // Since we decompress the key for the address,
     // we only need to know the sign of the signature
-    v: ((signature - 27) & 1) + 27,
+    v: ((signature[0] - 27) & 1) + 27,
     r: signature.slice(1, 33),
     s: signature.slice(33)
   }
