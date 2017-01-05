@@ -21,17 +21,32 @@ function generatePayload(msg, key){
   var privateKey = bitcore.PrivateKey.fromBuffer(hash)
   var hdPrivateKey = bitcore.HDPrivateKey.fromBuffer(value)
   var wif = privateKey.toWIF()
-      value = new Buffer("Hello World")
+      value = new Buffer(msg)
       hash = bitcore.crypto.Hash.sha256(value)
   var keyPair = bitcoin.ECPair.fromWIF(wif,bitcoin.networks.coval)
   var sig = sign(keyPair, 'Hello World')
   var signerAddress = pretty(address(keyPair))
   return {
-    signerAddress: signerAddress,
-    signatureVersion: sig.v,
-    signatureR: pretty(sig.r),
-    signatureS: pretty(sig.s)
+    coval: bitcoreSign(msg, hdPrivateKey.privateKey),
+    contract: {
+      signerAddress: signerAddress,
+      signatureVersion: sig.v,
+      signatureR: pretty(sig.r),
+      signatureS: pretty(sig.s)
+    }
   }      
+}
+
+function bitcoreSign(msg, key) {
+  var _msg = bitcore.Message
+  var m = _msg(msg)
+  var s = m.sign(key)
+  var covalAddress = key.toAddress().toString()
+  return {
+    toSign: msg,
+    covalAddress: covalAddress,
+    signature: s
+  }
 }
 
 function address(keyPair) {
