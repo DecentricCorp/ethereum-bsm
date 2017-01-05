@@ -1,8 +1,6 @@
 //var bitcoin = require('bitcoinjs-lib')
 //var ethUtil = require('ethereumjs-util')
 
-bitcoin = bitcoin.bitcoin
-
 function pretty(buf) {
   if (!Buffer.isBuffer(buf)) {
     return buf
@@ -15,6 +13,9 @@ function pretty(buf) {
 }
 
 function generatePayload(msg, key){
+  if (bitcoin.bitcoin) {
+    bitcoin = bitcoin.bitcoin
+  }
   var value = new Buffer(key)
   var hash = bitcore.crypto.Hash.sha256(value)
   var privateKey = bitcore.PrivateKey.fromBuffer(hash)
