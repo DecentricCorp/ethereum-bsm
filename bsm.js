@@ -1,6 +1,8 @@
 //var bitcoin = require('bitcoinjs-lib')
 //var ethUtil = require('ethereumjs-util')
 
+bitcoin = bitcoin.bitcoin
+
 function pretty(buf) {
   if (!Buffer.isBuffer(buf)) {
     return buf
@@ -10,6 +12,25 @@ function pretty(buf) {
     return '0x0' + ret
   else
     return '0x' + ret
+}
+
+function generatePayload(msg, key){
+  var value = new Buffer(key)
+  var hash = bitcore.crypto.Hash.sha256(value)
+  var privateKey = bitcore.PrivateKey.fromBuffer(hash)
+  var hdPrivateKey = bitcore.HDPrivateKey.fromBuffer(value)
+  var wif = privateKey.toWIF()
+      value = new Buffer("Hello World")
+      hash = bitcore.crypto.Hash.sha256(value)
+  var keyPair = bitcoin.ECPair.fromWIF(wif,bitcoin.networks.coval)
+  var sig = sign(keyPair, 'Hello World')
+  var signerAddress = pretty(address(keyPair))
+  return {
+    signerAddress: signerAddress,
+    signatureVersion: sig.v,
+    signatureR: pretty(sig.r),
+    signatureS: pretty(sig.s)
+  }      
 }
 
 function address(keyPair) {
