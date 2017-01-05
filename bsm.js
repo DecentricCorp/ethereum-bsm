@@ -1,5 +1,5 @@
-var bitcoin = require('bitcoinjs-lib')
-var ethUtil = require('ethereumjs-util')
+//var bitcoin = require('bitcoinjs-lib')
+//var ethUtil = require('ethereumjs-util')
 
 function pretty(buf) {
   if (!Buffer.isBuffer(buf)) {
@@ -20,7 +20,7 @@ function parseSignature(signature) {
   return {
     // Since we decompress the key for the address,
     // we only need to know the sign of the signature
-    v: ((signature[0] - 27) & 1) + 27,
+    v: ((signature - 27) & 1) + 27,
     r: signature.slice(1, 33),
     s: signature.slice(33)
   }
@@ -31,9 +31,9 @@ function sign(keyPair, message) {
   return parseSignature(signature)
 }
 
-module.exports = {
+/*module.exports = {
   address: address,
   sign: sign,
   pretty: pretty,
   parseSignature: parseSignature
-}
+}*/
